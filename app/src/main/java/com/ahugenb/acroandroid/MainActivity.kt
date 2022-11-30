@@ -11,20 +11,22 @@ import androidx.lifecycle.Observer
 import com.ahugenb.acroandroid.api.AcroApi
 import com.ahugenb.acroandroid.api.AcroRepo
 import com.ahugenb.acroandroid.api.ApiHelper
+import com.ahugenb.acroandroid.databinding.ActivityMainBinding
 import com.ahugenb.acroandroid.viewmodel.AcroViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    //todo binding
-    //todo scrolling
+    private lateinit var binding: ActivityMainBinding
     //todo testing
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val tvAcronym = findViewById<TextView>(R.id.tv_acronym)
-        val tvError = findViewById<TextView>(R.id.tv_error)
-        val et = findViewById<EditText>(R.id.et_acronym)
+        setContentView(binding.root)
+
+        val tvAcronym = binding.tvAcronym
+        val tvError = binding.tvError
+        val et = binding.etAcronym
 
         val api = ApiHelper.getInstance().create(AcroApi::class.java)
         val acroRepo = AcroRepo(api)

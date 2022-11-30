@@ -6,7 +6,7 @@ import com.ahugenb.acroandroid.api.AcroRepo
 import kotlinx.coroutines.*
 import java.io.EOFException
 
-class AcroViewModel(val repo: AcroRepo) : ViewModel() {
+class AcroViewModel(private val repo: AcroRepo) : ViewModel() {
     val errorMessage = MutableLiveData<ErrorState>()
     val acronymList = MutableLiveData<List<String>>()
 
@@ -39,8 +39,8 @@ class AcroViewModel(val repo: AcroRepo) : ViewModel() {
                         errorMessage.postValue(ErrorState.ERROR_STATE_NO_RESULTS)
                     } else {
                         errorMessage.postValue(ErrorState.ERROR_STATE_NONE)
+                        acronymList.postValue(longForms)
                     }
-                    acronymList.postValue(longForms)
                 } else {
                     errorMessage.postValue(ErrorState.ERROR_STATE_NETWORK_FAILURE)
                 }
