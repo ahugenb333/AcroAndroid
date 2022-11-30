@@ -14,16 +14,25 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_acronym"/>
+        app:layout_constraintBottom_toTopOf="@id/sv_acronym"/>
+
+    <ScrollView
+        android:id="@+id/sv_acronym"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars = "vertical"
+        android:fillViewport="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/et_acronym">
 
     <TextView
         android:id="@+id/tv_acronym"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:text="@string/tv_type_more"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/et_acronym" />
+        android:text="@string/tv_type_more" />
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/tv_error"
@@ -33,4 +42,5 @@
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/et_acronym" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

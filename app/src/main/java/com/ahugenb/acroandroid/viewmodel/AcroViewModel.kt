@@ -1,6 +1,5 @@
 package com.ahugenb.acroandroid.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ahugenb.acroandroid.api.AcroRepo
@@ -10,7 +9,6 @@ import java.io.EOFException
 class AcroViewModel(val repo: AcroRepo) : ViewModel() {
     val errorMessage = MutableLiveData<ErrorState>()
     val acronymList = MutableLiveData<List<String>>()
-    var job: Job? = null
 
     enum class ErrorState {
         ERROR_STATE_NO_RESULTS,
@@ -18,16 +16,16 @@ class AcroViewModel(val repo: AcroRepo) : ViewModel() {
         ERROR_STATE_NONE
     }
 
-    val exceptionHandler = CoroutineExceptionHandler{ _ , throwable ->
+    private val exceptionHandler = CoroutineExceptionHandler{ _ , throwable ->
         if (throwable is EOFException) {
             errorMessage.postValue(ErrorState.ERROR_STATE_NO_RESULTS)
         } else {
-            Log.e("Error in $TAG", throwable.message!!)
+            errorMessage.postValue(ErrorState.ERROR_STATE_NETWORK_FAILURE)
         }
     }
 
     fun getAcronyms(shortForm: String) {
-        job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
+        CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = repo.getAcronyms(shortForm)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
@@ -48,9 +46,5 @@ class AcroViewModel(val repo: AcroRepo) : ViewModel() {
                 }
             }
         }
-    }
-
-    companion object {
-        const val TAG = "AcroViewModel"
     }
 }

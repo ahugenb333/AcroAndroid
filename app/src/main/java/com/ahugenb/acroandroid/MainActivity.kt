@@ -15,13 +15,13 @@ import com.ahugenb.acroandroid.viewmodel.AcroViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    //todo adapter
     //todo binding
-    //todo detail
-    //todo loading
+    //todo scrolling
+    //todo testing
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val tvAcronym = findViewById<TextView>(R.id.tv_acronym)
         val tvError = findViewById<TextView>(R.id.tv_error)
         val et = findViewById<EditText>(R.id.et_acronym)
