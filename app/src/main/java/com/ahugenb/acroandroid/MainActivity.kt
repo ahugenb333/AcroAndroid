@@ -4,11 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
-import android.widget.EditText
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.ahugenb.acroandroid.api.AcroApi
 import com.ahugenb.acroandroid.api.AcroRepo
 import com.ahugenb.acroandroid.api.ApiHelper
@@ -18,7 +14,7 @@ import com.ahugenb.acroandroid.viewmodel.AcroViewModel
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    //todo testing
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -30,10 +26,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.acroViewModel = viewModel
 
-        val et = binding.etAcronym
-
-
-        et.addTextChangedListener (object : TextWatcher {
+        binding.etAcronym.addTextChangedListener (object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
 
@@ -42,7 +35,6 @@ class MainActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.getAcronyms(s.toString())
-
             }
         })
     }

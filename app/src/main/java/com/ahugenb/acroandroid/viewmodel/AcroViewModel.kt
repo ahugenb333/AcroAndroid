@@ -8,38 +8,15 @@ import kotlinx.coroutines.*
 import java.io.EOFException
 
 class AcroViewModel(private val repo: AcroRepo) : ViewModel() {
-    val errorMessage = MutableLiveData<ErrorState>()
-    val acronymList = MutableLiveData<List<String>>()
-
-    enum class ErrorState {
-        ERROR_STATE_NO_RESULTS,
-        ERROR_STATE_NETWORK_FAILURE,
-        ERROR_STATE_NONE
-    }
-
-    var acronymString: String = getAcronym()
-    var isAcronymVisible: Boolean = acronymString != ""
-    var isErrorStringVisible: Boolean = !isAcronymVisible
-    var errorStringId: Int = when(errorMessage.value) {
-        ErrorState.ERROR_STATE_NO_RESULTS -> R.string.tv_no_results
-        ErrorState.ERROR_STATE_NETWORK_FAILURE -> R.string.tv_network_failure
-        else -> 0
-    }
-
-    private fun getAcronym(): String {
-        var strs = ""
-        acronymList.value?.forEach { str ->
-            strs = strs.plus(str).plus("\n")
-        }
-        return strs
-    }
-
+    val acronym = MutableLiveData("")
+    val error = MutableLiveData(0)
 
     private val exceptionHandler = CoroutineExceptionHandler{ _ , throwable ->
         if (throwable is EOFException) {
-            errorMessage.postValue(ErrorState.ERROR_STATE_NO_RESULTS)
+            error.postValue(R.string.tv_no_results)
         } else {
-            errorMessage.postValue(ErrorState.ERROR_STATE_NETWORK_FAILURE)
+            acronym.postValue("")
+            error.postValue(R.string.tv_network_failure)
         }
     }
 
@@ -48,20 +25,21 @@ class AcroViewModel(private val repo: AcroRepo) : ViewModel() {
             val response = repo.getAcronyms(shortForm)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
-                    val longForms = mutableListOf<String>()
+                    var strs = ""
                     response.body()?.forEach {
                         it.lfs.forEach { longForm ->
-                            longForms.add(longForm.lf!!)
+                            strs = strs.plus(longForm.lf.toString().plus("\n"))
                         }
                     }
-                    if (longForms.isEmpty()) {
-                        errorMessage.postValue(ErrorState.ERROR_STATE_NO_RESULTS)
+                    if (strs == "") {
+                        error.postValue(R.string.tv_no_results)
                     } else {
-                        errorMessage.postValue(ErrorState.ERROR_STATE_NONE)
-                        acronymList.postValue(longForms)
+                        error.postValue(0)
                     }
+                    acronym.postValue(strs)
                 } else {
-                    errorMessage.postValue(ErrorState.ERROR_STATE_NETWORK_FAILURE)
+                    acronym.postValue("")
+                    error.postValue(R.string.tv_network_failure)
                 }
             }
         }
