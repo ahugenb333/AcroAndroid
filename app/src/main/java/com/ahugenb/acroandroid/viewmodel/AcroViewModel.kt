@@ -24,8 +24,8 @@ class AcroViewModel(private val repo: AcroRepo) : ViewModel() {
         CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
             val response = repo.getAcronyms(shortForm)
             withContext(Dispatchers.Main) {
+                var strs = ""
                 if (response.isSuccessful) {
-                    var strs = ""
                     response.body()?.forEach {
                         it.lfs.forEach { longForm ->
                             strs = strs.plus(longForm.lf.toString().plus("\n"))
@@ -36,11 +36,10 @@ class AcroViewModel(private val repo: AcroRepo) : ViewModel() {
                     } else {
                         error.postValue(0)
                     }
-                    acronym.postValue(strs)
                 } else {
-                    acronym.postValue("")
                     error.postValue(R.string.tv_network_failure)
                 }
+                acronym.postValue(strs)
             }
         }
     }
