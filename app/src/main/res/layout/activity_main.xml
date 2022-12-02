@@ -47,7 +47,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text='@{(acroViewModel.error > 0) ? context.getString(acroViewModel.error) : ""}'
+            android:text="@{(acroViewModel.error > 0) ? context.getString(acroViewModel.error) : &quot;&quot;}"
             android:visibility="@{acroViewModel.acronym.isEmpty() ? View.VISIBLE : View.GONE}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_acronym" />
